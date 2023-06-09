@@ -1,0 +1,295 @@
+---
+title: "Shiny tutorial"
+output: html_document
+runtime: shiny
+---
+
+This Shiny tutorial is written in an R Markdown file so you can run lots of Shiny apps directly from a single file.
+If you aren't familiar with R Markdown, below is a chunk of code. If you click on the green arrow at the top right of the chunk, the code inside the chunk will be run and the output displayed underneath.
+
+```{r}
+x <- 1 + 2
+x
+```
+
+*Section 1: Shiny basics and widgets*
+
+The Shiny library contains many functions to allow us to create Shiny apps. 
+If you have never used Shiny before, you may need to install the package first. Uncomment the first line of code in the chunk below before you run it to install the shiny package. 
+
+```{r}
+#install.packages("shiny")
+
+library(shiny)
+```
+
+This is the template for a Shiny app. If you click on the green arrow it will run (probably in a separate window). It should just be a blank page for now.
+
+```{r}
+ui <- fluidPage(
+)
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+Try adding some text to your Shiny app. Use the function p() to create a paragraph of text in the ui section.
+
+*Note* If you are familiar with HTML, Shiny uses many HTML tag functions. For more details see the HTML Content section here: https://shiny.rstudio.com/tutorial/written-tutorial/lesson2/
+
+```{r}
+ui <- fluidPage(
+  p("Welcome To Your First Shiny App!")
+)
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+There are some inbuilt example Shiny apps included with the Shiny package. The code is also displayed automatically underneath the app.
+
+Have a look at this example app and the code.
+
+We are going to build a similar Shiny app with a user input widget and a reactive plot.
+
+```{r}
+runExample("01_hello")
+```
+
+Let's code an input widget. 
+
+You can see the different types of widget at the widget gallery: https://shiny.rstudio.com/gallery/widget-gallery.html
+
+This is a slider widget:
+
+```{r}
+ui <- fluidPage(
+  
+  sliderInput("slider1", h3("Sliders"), min = 0, max = 100, value = 50)
+  
+)
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+Try changing the settings for the widget. Edit the label of the slider, the minimum and maximum values the user can choose and the starting value.
+
+*Challenge* set the slider to have a 'step' of 5 (i.e. the user can only select the values 0,5,10 etc instead of every integer value)
+
+```{r}
+ui <- fluidPage(
+  
+  sliderInput("slider1", h3("Slider widget"), min = -10, max = 10, value = 0, step = 5)
+  
+)
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+For this tutorial, you're going to be using the inbuilt R dataset 'iris'
+
+```{r}
+iris
+```
+
+This contains data on three different species of iris: setosa, versicolor and virginica 
+
+```{r}
+levels(iris$Species)
+```
+
+Edit the selectInput function code to make a select box widget so the user can choose one of the species of iris.
+
+*NOTE* There is some extra code added to display the selected values. Keep the InputId as "select" so this continues to work. 
+
+*Hint* You want your choice values to be text not numbers to make it easier to select the correct rows of data later on. Make sure this is identical to the species naming in the data (i.e. no capital letters)
+
+```{r}
+ui <- fluidPage(
+  
+  selectInput("select", label = h3("Choose a species:"), 
+    choices = list("Setosa" = "setosa", "Versicolor" = "versicolor", "Virginica" = "virginica"), 
+    selected = 1),
+  
+  hr(),
+  fluidRow(column(3, verbatimTextOutput("value")))
+)
+
+server <- function(input, output) {
+  output$value <- renderPrint({ input$select })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+*Section 2: Layout and plots*
+
+In this section, you're going to add a reactive plot into your app. 
+
+First, take a look at this app with a common ui layout. There is a title panel, a sidebar panel and a main panel.
+
+There's more information about Shiny layouts here: https://shiny.rstudio.com/tutorial/written-tutorial/lesson2/
+
+```{r}
+ui <- fluidPage(
+  
+  titlePanel("title panel"),
+
+  sidebarLayout(
+    sidebarPanel("sidebar panel"),
+    mainPanel("main panel")
+  )
+  
+)
+
+server <- function(input, output) {
+
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+Edit this code chunk to give your app a title and put the widget you coded earlier into the sidebar panel.
+
+```{r}
+ui <- fluidPage(
+  
+  titlePanel("My App Title"),
+
+  sidebarLayout(
+    sidebarPanel(  
+      selectInput("select", label = h3("Choose a species:"), 
+                  choices = list("Setosa" = "setosa", 
+                                 "Versicolor" = "versicolor", 
+                                 "Virginica" = "virginica"),
+                  selected = 1),),
+    
+    mainPanel("main panel")
+  )
+  
+)
+
+server <- function(input, output) {
+
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+Now you're going to create a plot. 
+
+As a first step, create a standard R plot (not even using Shiny) so you can get it looking how you want.
+
+Using the iris data set create a simple scatter plot of sepal length vs sepal width for just one of the species of iris.
+
+```{r}
+# This line keeps just the setosa rows of the data
+iris_subset <- iris[iris$Species == "setosa",]
+
+# Add code to create a scatter plot
+plot(iris_subset$Sepal.Length, iris_subset$Sepal.Width)
+```
+
+Then add your plot into a Shiny app. Use the renderPlot function in the server section to tell Shiny how to build the plot and the plotOutput function in the ui section place the plot in the app.
+
+There is more information on reactive output here: https://shiny.posit.co/r/getstarted/shiny-basics/lesson4/
+
+```{r}
+ui <- fluidPage(
+  plotOutput("my_plot")
+)
+
+server <- function(input, output) {
+  output$my_plot <- renderPlot({
+    
+    iris_subset <- iris[iris$Species == "setosa",]
+
+    plot(iris_subset$Sepal.Length, iris_subset$Sepal.Width)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+Now combine the layout and plot code so you have your widget in the sidebar panel and your plot in the main panel.
+
+```{r}
+ui <- fluidPage(
+  
+  titlePanel("My App Title"),
+
+  sidebarLayout(
+    sidebarPanel(  
+      selectInput("select", label = h3("Choose a species:"), 
+                  choices = list("Setosa" = "setosa", "Versicolor" = "versicolor", "Virginica" = "virginica"),
+                  selected = 1),),
+    
+    mainPanel(
+        plotOutput("my_plot")
+    )
+  )
+  
+)
+
+server <- function(input, output) {
+    output$my_plot <- renderPlot({
+    
+      # Keep only the setosa rows of data
+      iris_subset <- iris[iris$Species == "setosa",]
+
+      plot(iris_subset$Sepal.Length, iris_subset$Sepal.Width)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+The final step is to make the plot reactive so it changes to display the correct data when the user selects the different species. 
+
+Copy the code from the chunk above and change the line that filters the iris dataset to use the input value from your widget.
+
+```{r}
+ui <- fluidPage(
+  
+  titlePanel("My App Title"),
+
+  sidebarLayout(
+    sidebarPanel(  
+      selectInput("select", label = h3("Choose a species:"), 
+                  choices = list("Setosa" = "setosa", "Versicolor" = "versicolor", "Virginica" = "virginica"),
+                  selected = 1),),
+    
+    mainPanel(
+        plotOutput("my_plot")
+    )
+  )
+  
+)
+
+server <- function(input, output) {
+    output$my_plot <- renderPlot({
+    
+      # Keep only the setosa rows of data
+      iris_subset <- iris[iris$Species == input$select,]
+
+      plot(iris_subset$Sepal.Length, iris_subset$Sepal.Width)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
