@@ -1,6 +1,6 @@
 # Interactive data analysis and visualisation: an introduction to R Shiny apps  
 
-1 day MIBTP masterclass, University of Leicester, 12th June 2023
+MIBTP masterclass, University of Leicester, 12th June 2023
 
 [Shiny Tutorial](https://github.com/nabury/shiny-masterclass/blob/main/Part%201/tutorial.Rmd)
 
