@@ -1,0 +1,109 @@
+---
+title: "Reactivity tutorial"
+output: html_document
+runtime: shiny
+---
+
+*Reactive expressions*
+
+
+Load the shiny library, if needed
+```{r}
+library(shiny)
+```
+
+This is a working app inspired by and adapted from https://shiny.posit.co/r/articles/build/action-buttons/
+
+The app generates n random values (where n is a user input) and creates a histogram of the values.
+
+```{r}
+library(shiny)
+
+ui <- fluidPage(
+  numericInput("n", "n", 50),
+  plotOutput("plot"),
+)
+
+server <- function(input, output) {
+  
+  output$plot <- renderPlot({
+    randomVals <- runif(input$n)
+    hist(randomVals)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+You decide you want to add a second plot of the random values, this time a boxplot. But there's an issue - the random values for plots 1 and 2 are a different set of randomly generated values. Use a reactive expression to generate the random values once to be used for both plot 1 and plot 2.
+
+```{r}
+library(shiny)
+
+ui <- fluidPage(
+  numericInput("n", "n", 50),
+  plotOutput("plot1"),
+  plotOutput("plot2")
+)
+
+server <- function(input, output) {
+  
+  output$plot1 <- renderPlot({
+    randomVals <- runif(input$n)
+    hist(randomVals)
+  })
+  
+  output$plot2 <- renderPlot({
+    randomVals <- runif(input$n)
+    boxplot(randomVals)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+*Action buttons*
+
+You have another app (it looks strangely like the last one) but this time it is very slow. (This is because of the Sys.sleep line that makes R wait for 3 seconds every time the plot updates. I've used it to simulate code that is slow to compute.)
+
+```{r}
+library(shiny)
+
+ui <- fluidPage(
+  numericInput("n", "n", 50),
+  plotOutput("plot"),
+)
+
+server <- function(input, output) {
+  
+  output$plot <- renderPlot({
+    Sys.sleep(3) # You can move this line but do not delete it
+    randomVals <- runif(input$n)
+    hist(randomVals)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+Edit this app to have an action button, so that the plot only updates when the user clicks the button.
+
+```{r}
+library(shiny)
+
+ui <- fluidPage(
+  numericInput("n", "n", 50),
+  plotOutput("plot"),
+)
+
+server <- function(input, output) {
+  
+  output$plot <- renderPlot({
+    Sys.sleep(3) # You can move this line but do not delete it
+    randomVals <- runif(input$n)
+    hist(randomVals)
+  })
+}
+
+shinyApp(ui, server)
+```
