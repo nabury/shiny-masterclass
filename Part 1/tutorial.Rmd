@@ -12,7 +12,7 @@ x <- 1 + 2
 x
 ```
 
-*Section 1: Shiny basics and widgets*
+*Section A: Shiny basics and widgets*
 
 The Shiny library contains many functions to allow us to create Shiny apps. 
 If you have never used Shiny before, you may need to install the package first. Uncomment the first line of code in the chunk below before you run it to install the shiny package. 
@@ -52,7 +52,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-There are some inbuilt example Shiny apps included with the Shiny package. The code is also displayed automatically underneath the app.
+There are some in-built example Shiny apps included with the Shiny package. The code is also displayed automatically underneath the app.
 
 Have a look at this example app and the code.
 
@@ -114,29 +114,38 @@ levels(iris$Species)
 
 Edit the selectInput function code to make a select box widget so the user can choose one of the species of iris.
 
-*NOTE* There is some extra code added to display the selected values. Keep the InputId as "select" so this continues to work. 
+*NOTE* There is some extra code added to display the selected values. Keep the InputId as "select_species" so this continues to work. 
 
 *Hint* You want your choice values to be text not numbers to make it easier to select the correct rows of data later on. Make sure this is identical to the species naming in the data (i.e. no capital letters)
 
 ```{r}
 ui <- fluidPage(
   
-  selectInput("select", label = h3("Select box"), 
+  selectInput("select_species", label = h3("Select box"), 
     choices = list("Choice 1" = 1, "Choice 2" = 2, "Choice 3" = 3), 
     selected = 1),
   
   hr(),
-  fluidRow(column(3, verbatimTextOutput("value")))
+  fluidRow(column(3, verbatimTextOutput("widget_value")))
 )
 
 server <- function(input, output) {
-  output$value <- renderPrint({ input$select })
+  output$widget_value <- renderPrint({ input$select_species })
 }
 
 shinyApp(ui = ui, server = server)
 ```
 
-*Section 2: Layout and plots*
+###############
+# 
+#
+# STOP HERE
+#
+#
+###############
+
+
+*Section B: Layout and plots*
 
 In this section, you're going to add a reactive plot into your app. 
 
