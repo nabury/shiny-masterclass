@@ -11,6 +11,6 @@ Part 3 - [Create a Shiny App](https://github.com/nabury/shiny-masterclass/blob/m
 -----
 
 Previous sessions:  
-MIBTP masterclass, University of Leicester, 12th June 2023
+MIBTP masterclass, University of Leicester, 12th June 2023  
 PGR masterclass, University of Leicester, 20th May 2024
 
