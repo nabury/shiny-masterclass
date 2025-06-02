@@ -1,6 +1,6 @@
 # Interactive data analysis and visualisation: an introduction to R Shiny apps  
 
-PGR masterclass, University of Leicester, 20th May 2024
+CLS/MIBTP PGR masterclass, University of Leicester, 3rd June 2025
 
 Part 1 - [Shiny Tutorial](https://github.com/nabury/shiny-masterclass/blob/main/Part%201/tutorial.Rmd)
 
@@ -10,6 +10,7 @@ Part 3 - [Create a Shiny App](https://github.com/nabury/shiny-masterclass/blob/m
 
 -----
 
-Previous iterations:  
-MIBTP masterclass, University of Leicester, 12th June 2023
+Previous sessions:  
+MIBTP masterclass, University of Leicester, 12th June 2023  
+PGR masterclass, University of Leicester, 20th May 2024
 
